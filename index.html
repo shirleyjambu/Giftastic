@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+<link rel="stylesheet" href="./assets/css/style.css">
+<title>Giftastic</title>
+</head>
+<body>
+<!-- Main Container-->  
+<div class="container">
+  <!-- Header-->
+  <div class="d-flex bg-warning text-secondary justify-content-center">
+    <h1>Giftastic</h1>
+  </div>
+  <!--Flex Container 1-->
+  <div class="d-flex">
+    <!-- Button Div-->
+    <div class="p-2 mr-auto flex-item">
+        <div id="buttons"></div> 
+    </div>
+    <!--Div for Form-->
+    <div class="p-2  flex-item">
+        <form id="topic-form">
+            <label for="topic-input">Enter a new topic !</label>
+            <input type="text" id="topic-input" class="form-control">
+            <br>
+        
+            <!-- Button triggers new topic to be added -->
+            <input id="add-topic" type="submit" value="Add Topic" class="btn btn-secondary">
+            <span id="message" class="text-danger"></span>
+          </form>
+    </div><!--End of Form-->
+  </div>  <!--End Flex container 1-->
+
+  <!--Flex Container 2-->
+  <div class="d-flex">
+    <div class="p-2 flex-item">
+        <div id="images"></div>
+    </div>
+  </div>
+</div><!--End of Main-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<script src="assets/javascript/giftastic.js"></script>
+</body>
+</html>
