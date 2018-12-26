@@ -33,10 +33,12 @@ function getImages(sText) {
     .then(function (response) {
       console.log(response);
        var results = response.data;
+       var $gifTable = $("<table class='imgTable'>");
+
         results.forEach(function(gif) {
-        var $gifDiv= $("<div class='d-flex'>");  
-        var $gif = $("<div class='p-2 flex-item flex-fill'>"); 
-        var $gifDetails = $("<div class='p-2 flex-item flex-fill'>"); 
+
+        var $gif =$("<td class='imgTd'>");
+        var $gifDetails = $("<td class='imgTd'>");
         //var $dlBtn = createButton("Download");  
         var rating = gif.rating.toUpperCase();
         var title = gif.title;
@@ -47,13 +49,13 @@ function getImages(sText) {
         $gif.append(`<img mode='still' src=${stillUrl} still-url=${stillUrl} animate-url=${animateUrl}/>`);
 
         $gifDetails
-        .append(`<p>Rating : ${rating}</p>`)
-        .append(`<p>Title  : ${title}</p>`);
-        //.append(`<p><a href=${animateUrl} download>Download</a>`);
+        .append(`<p><strong>Rating :</strong> ${rating}</p>`)
+        .append(`<p><strong>Title  :</strong> ${title}</p>`)
+        .append(`<p><a href='${animateUrl}' target='new' download>Download</a></p>`);
 
-        $gifDiv.append($gif,$gifDetails);
+        $gifTable.append($("<tr>"),$gif,$gifDetails,"</tr>");
 
-        $("#images").prepend($gifDiv);
+        $("#images").prepend($gifTable);
       });
       
  
@@ -65,6 +67,25 @@ function getImages(sText) {
     );
 
   };
+
+/*function createTable(){
+
+  var $gitTable = $("<table class='imgTable'>");
+
+  for(var i=0;i<10;i++){
+    var gitTr = $("<tr>");
+    var gitTd1 = $("<td class='imgTd'>");
+    var gitTd2 = $("<td class='imgTd'>");
+
+    gitTd1.text("hhh");
+    gitTd2.text("fgjl");
+
+    gitTr.append(gitTd1,gitTd2);
+    $gitTable.append(gitTr);  
+  }
+  
+  $("#images").append($gitTable);
+}  */
   
 function changeMode($image){
   var mode = $image.attr("mode");
@@ -81,7 +102,7 @@ function changeMode($image){
 
 // Event handlers
 $(document).ready(function(){
-
+  
   // Read the array and load buttons
   loadButtons();
 
