@@ -1,6 +1,6 @@
 // Variables
 var arrTopics = ['Tulip','Daffodil','Rose'];
-
+var arrFavs = [];
 
 // Function
 function loadButtons(){
@@ -32,30 +32,32 @@ function getImages(sText) {
     })
     .then(function (response) {
       console.log(response);
-       var results = response.data;
-       var $gifTable = $("<table class='imgTable'>");
-
+        var results = response.data;
+        var $gifTable = $("<table class='imgTable'>");
+      
         results.forEach(function(gif) {
+            var $tRow = $("<tr>");
+            var $gif =$("<td class='imgTd'>");
+            var $gifDetails = $("<td class='imgTd'>");
+            //var $dlBtn = createButton("Download");  
+            var rating = gif.rating.toUpperCase();
+            var title = gif.title;
+          // var displayname = gif.user.display_name?gif.user.display_name:"NONE";  
+            var stillUrl = gif.images.fixed_height_still.url;
+            var animateUrl = gif.images.fixed_height.url;
+            
+            $gif.append(`<img mode='still' src=${stillUrl} still-url=${stillUrl} animate-url=${animateUrl}/>`);
 
-        var $gif =$("<td class='imgTd'>");
-        var $gifDetails = $("<td class='imgTd'>");
-        //var $dlBtn = createButton("Download");  
-        var rating = gif.rating.toUpperCase();
-        var title = gif.title;
-       // var displayname = gif.user.display_name?gif.user.display_name:"NONE";  
-        var stillUrl = gif.images.fixed_height_still.url;
-        var animateUrl = gif.images.fixed_height.url;
-        
-        $gif.append(`<img mode='still' src=${stillUrl} still-url=${stillUrl} animate-url=${animateUrl}/>`);
+            $gifDetails
+            .append(`<p><strong>Rating :</strong> ${rating}</p>`)
+            .append(`<p><strong>Title  :</strong> ${title}</p>`)
+            .append(`<p><a href='${animateUrl}' target='new' download>Download</a></p>`)
+            .append(`<p><button onclick="savetoFav('${animateUrl}')">Add to Favs</button></p>`);
 
-        $gifDetails
-        .append(`<p><strong>Rating :</strong> ${rating}</p>`)
-        .append(`<p><strong>Title  :</strong> ${title}</p>`)
-        .append(`<p><a href='${animateUrl}' target='new' download>Download</a></p>`);
+            $tRow.append($gif,$gifDetails);
+            $gifTable.append($tRow);
 
-        $gifTable.append($("<tr>"),$gif,$gifDetails,"</tr>");
-
-        $("#images").prepend($gifTable);
+            $("#images").prepend($gifTable);
       });
       
  
@@ -65,9 +67,30 @@ function getImages(sText) {
         $("#images").text("Unexpected Error");
       }
     );
-
   };
 
+  function savetoFav(url){
+    localStorage.setItem("url",url);
+    console.log("url" + url);
+    $("#favs").append(`<img src='${url}' />`);
+    arrFavs.push(url);
+    localStorage.setItem("favs",JSON.stringify(arrFavs));
+  }
+
+  function getFavs() {
+    var url = "";
+    if(localStorage.getItem("favs")){
+      arrFavs = JSON.parse(localStorage.getItem("favs"));  
+      for(var i=0; i < arrFavs.length ;i++){
+        url = arrFavs[i];
+        $("#favs").append(`<img src='${url}' />`);
+      }
+    }else{
+      $("#favs").text("");
+    }    
+    
+  };
+  
 /*function createTable(){
 
   var $gitTable = $("<table class='imgTable'>");
@@ -75,6 +98,7 @@ function getImages(sText) {
   for(var i=0;i<10;i++){
     var gitTr = $("<tr>");
     var gitTd1 = $("<td class='imgTd'>");
+    
     var gitTd2 = $("<td class='imgTd'>");
 
     gitTd1.text("hhh");
@@ -106,6 +130,9 @@ $(document).ready(function(){
   // Read the array and load buttons
   loadButtons();
 
+  //Load Favorite images
+  getFavs();
+
   // Get images from API, on click of button
   $(document).on("click",".btn",function(){
     var iTxt = $(this).attr("id"); 
@@ -125,7 +152,7 @@ $(document).ready(function(){
     // Write code to grab the text the user types into the input field
     var topicEntered = $("#topic-input").val().trim();
     if(topicEntered){
-      $("#topic-input").empty();
+      $("#topic-input").val("");
       // Write code to add the new movie into the movies array
       arrTopics.push(topicEntered);
       // The loadButtons function is called, rendering the list of movie buttons
@@ -134,8 +161,13 @@ $(document).ready(function(){
       $("#message").text("Please enter topic.")
     }
     
-    
-    
+  });
+
+  //On click of Clear Favorites
+  $("#clear-favs").on("click",function(){
+    event.preventDefault();
+    localStorage.removeItem("favs");
+    $("#favs").empty();
   });
 
 });
